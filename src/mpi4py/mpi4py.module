@@ -64,7 +64,7 @@ if { \$loadApps  }  {
       puts stderr "loading ROLLCOMPILER and ROLLMPI_ROLLNETWORK modules"
   }
 }
-prepend-path PYTHONPATH /opt/mpi4py/lib64/pythonPYV/site-packages
+prepend-path PYTHONPATH /opt/mpi4py/lib64/pythonPYV/site-packages:/opt/mpi4py/lib/pythonPYV/site-packages
 END
 
 chmod 0644  ROOT_PKGROOTMODULEROOT/VERSION
