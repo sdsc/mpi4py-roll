@@ -65,24 +65,34 @@ default:
 	@echo "copyright|rpm|pkg|clean"
 
 copyright rpm pkg clean::
-	for i in $(SRCDIRS) ; do \
-	  grep -q ROLLCOMPILER $$i/version.mk; \
+	for i in $(SRCDIRS); do \
+	  grep -q PYVERSION $$i/version.mk; \
 	  if test $$? -eq 0; then \
-	    for c in $(ROLLCOMPILER); do \
-	      for n in $(ROLLNETWORK); do \
-	        grep -q ROLLMPI $$i/version.mk; \
-	        if test $$? -eq 0; then \
-	          for m in $(ROLLMPI); do \
-	            echo make $@ in $$i with ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI=$$m; \
-	            (cd $$i; $(MAKE) ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI=$$m $@); \
+	    PYDEFAULT=`echo $(ROLLPY) | sed 's/ .*//'`; \
+	    for p in $(ROLLPY); do \
+	      module load $$p; \
+	      export PYVERSION=`python -c "from __future__ import print_function;import sys;print(sys.version[:3])"`; \
+	      grep -q ROLLCOMPILER $$i/version.mk; \
+	      if test $$? -eq 0; then \
+	        for c in $(ROLLCOMPILER); do \
+	          for n in $(ROLLNETWORK); do \
+	            grep -q ROLLMPI $$i/version.mk; \
+	            if test $$? -eq 0; then \
+	              for m in $(ROLLMPI); do \
+	                echo make $@ in $$i with ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION}; \
+	                (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
+	              done; \
+	            else \
+	              echo make $@ in $$i with ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI="$(ROLLMPI)"; \
+	              (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI="$(ROLLMPI)" $@) || exit 2; \
+	            fi; \
 	          done; \
-	        else \
-	          echo make $@ in $$i with ROLLCOMPILER=$$c ROLLNETWORK=$$n; \
-	          (cd $$i; $(MAKE) ROLLCOMPILER=$$c ROLLNETWORK=$$n $@); \
-	        fi; \
-	      done; \
+	        done; \
+	      else \
+	        (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLNETWORK="$(ROLLNETWORK)" ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
+	      fi; \
 	    done; \
 	  else \
-	    (cd $$i; $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLNETWORK="$(ROLLNETWORK)" $@) ; \
+	    (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLNETWORK="$(ROLLNETWORK)" $@) || exit 2; \
 	  fi; \
 	done
