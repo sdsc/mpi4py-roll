@@ -56,17 +56,6 @@
 #
 # $Log$
 
-ifndef ROLLCOMPILER
-  ROLLCOMPILER = gnu
-endif
-ifndef ROLLNETWORK
-  ROLLNETWORK = eth
-endif
-ifndef ROLLMPI
-  ROLLMPI = openmpi
-endif
-
-
 REDHAT.ROOT = $(CURDIR)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
@@ -76,8 +65,10 @@ include pull.mk
 COMPILERSETUP = \
   if test -e /etc/profile.d/modules.sh; then \
     . /etc/profile.d/modules.sh; \
-    module load $(ROLLCOMPILER); \
-  fi
+    module load $(ROLLCOMPILER) || true; \
+  fi; \
+  echo === Compiler and version ===; \
+  $(CC) --version
 
 ifeq ("$(ROLLNETWORK)", "eth")
   MPIMODULE = $(ROLLMPI)
@@ -88,42 +79,44 @@ endif
 MPISETUP = \
   if test -e /etc/profile.d/modules.sh; then \
     . /etc/profile.d/modules.sh; \
-    module load $(MPIMODULE); \
+    module load $(MPIMODULE) || true; \
   fi; \
-  export MPI_HOME=`which mpicxx | perl -pe 's!/bin/.*!!'`; \
-  if test -z "$${MPI_HOME}"; then \
-    export MPI_HOME=/opt/$(ROLLMPI); \
+  if test -z "$${MPIHOME}"; then \
+    export MPIHOME=/opt/$(ROLLMPI); \
   fi; \
-  echo Using MPI from $${MPI_HOME}; \
-  export PATH=$${PATH}:$${MPI_HOME}/bin; \
-  export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${MPI_HOME}/lib
+  echo === MPIHOME ===; \
+  echo $${MPIHOME}
 
-
-ifndef PYPATH
-  PYPATH = python
-endif
-PYVERSION = $(shell $(PYPATH) -c "from __future__ import print_function;import sys;print(sys.version[:3])")
+PYSETUP = \
+  if test -e /etc/profile.d/modules.sh; then \
+    . /etc/profile.d/modules.sh; \
+    module load $(ROLLPY) || true; \
+  fi; \
+  echo === Python and version ===; \
+  echo `which python; python --version`
 
 build: $(SRC_DIRS)
 	( \
 	  $(COMPILERSETUP); \
 	  $(MPISETUP); \
+	  $(PYSETUP); \
 	  cd $(SOURCE_DIR); \
-          python setup.py build \
+	  python setup.py build \
 	)
 	@echo "::: Package $(NAME) build complete :::"
 
 install::
-	mkdir -p $(REDHAT.ROOT)/src/build-mpi4py-modules
 	( \
- 	  $(COMPILERSETUP); \
- 	  $(MPISETUP); \
- 	  cd $(SOURCE_DIR); \
-          export PYTHONPATH=$(ROOT)/$(PKGROOT)/lib64/python$(PYVERSION):$${PYTHONPATH}; \
-          python setup.py install --prefix=$(ROOT)/$(PKGROOT) \
- 	)
+	  $(COMPILERSETUP); \
+	  $(MPISETUP); \
+	  $(PYSETUP); \
+	  cd $(SOURCE_DIR); \
+	  export PYTHONPATH=$(ROOT)/$(PKGROOT)/lib64/python$(PYVERSION):$${PYTHONPATH}; \
+	  python setup.py install --prefix=$(ROOT)/$(PKGROOT) \
+	)
+	mkdir -p $(REDHAT.ROOT)/src/build-mpi4py-modules
 	cat mpi4py.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/mpi4py!g;s!VERSION!$(VERSION)!g;s!ROLLCOMPILER!$(ROLLCOMPILER)!g;s!ROLLMPI!$(ROLLMPI)!g;s!ROLLNETWORK!$(ROLLNETWORK)!g;s!PYV!$(PYVERSION)!g" \
-           > $(REDHAT.ROOT)/src/build-mpi4py-modules/$(NAME).module
+	  > $(REDHAT.ROOT)/src/build-mpi4py-modules/$(NAME).module
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::
