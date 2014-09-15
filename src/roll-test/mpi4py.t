@@ -23,11 +23,8 @@ if($appliance =~ /$installedOnAppliancesPattern/) {
 
 open(OUT, ">$TESTFILE.sh");
 print OUT <<END;
-  if test -f /etc/profile.d/modules.sh; then
-    . /etc/profile.d/modules.sh
-    module load mpi4py
-  fi
-  mpirun -np 4 python $TESTFILE.py
+module load mpi4py
+mpirun -np 4 python $TESTFILE.py
 END
 close (OUT);
 
@@ -50,7 +47,6 @@ SKIP: {
 
 SKIP: {
   skip 'mpi4py not installed', 1 if ! $isInstalled;
-  skip 'modules not installed', 1 if ! -f '/etc/profile.d/modules.sh';
   `/bin/ls /opt/modulefiles/applications/mpi4py/[0-9]* 2>&1`;
   ok($? == 0, "mpi4py module installed");
   `/bin/ls /opt/modulefiles/applications/mpi4py/.version.[0-9]* 2>&1`;

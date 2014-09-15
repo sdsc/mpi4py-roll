@@ -21,7 +21,7 @@ endif
 
 NAME           = mpi4py_$(COMPILERNAME)_$(ROLLMPI)_$(ROLLNETWORK)_py$(PYVERSION)
 VERSION        = 1.3.1
-RELEASE        = 0
+RELEASE        = 1
 PKGROOT        = /opt/mpi4py
 
 SRC_SUBDIR     = mpi4py
