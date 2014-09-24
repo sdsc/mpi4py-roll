@@ -1,5 +1,9 @@
-NAME       = mpi4py-modules
-VERSION    = 1.0
-RELEASE    = 0
+NAME        = mpi4py-modules
+RELEASE     = 1
+PKGROOT     = /opt/modulefiles/applications/mpi4py
 
-RPM.EXTRAS = AutoReq:No
+VERSION_SRC = $(REDHAT.ROOT)/src/mpi4py/version.mk
+VERSION_INC = version.inc
+include $(VERSION_INC)
+
+RPM.EXTRAS  = AutoReq:No

@@ -102,9 +102,6 @@ install::
 	  export PYTHONPATH=$(ROOT)/$(PKGROOT)/lib64/python$(PYVERSION):$${PYTHONPATH}; \
 	  python setup.py install --prefix=$(ROOT)/$(PKGROOT) \
 	)
-	mkdir -p $(REDHAT.ROOT)/src/build-mpi4py-modules
-	cat mpi4py.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/mpi4py!g;s!VERSION!$(VERSION)!g;s!ROLLCOMPILER!$(ROLLCOMPILER)!g;s!ROLLMPI!$(ROLLMPI)!g;s!ROLLNETWORK!$(ROLLNETWORK)!g;s!PYV!$(PYVERSION)!g" \
-	  > $(REDHAT.ROOT)/src/build-mpi4py-modules/$(NAME).module
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::

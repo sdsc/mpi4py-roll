@@ -56,6 +56,4 @@
 
 SRCDIRS = `find . -maxdepth 1 -type d \
 	-not -name CVS \
-	-not -name . \
-	-not -name mpi4py-modules \
-	-not -name build\*` mpi4py-modules
+	-not -name .`
