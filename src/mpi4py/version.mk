@@ -4,12 +4,9 @@ endif
 COMPILERNAME := $(firstword $(subst /, ,$(ROLLCOMPILER)))
 
 ifndef ROLLMPI
-  ROLLMPI = openmpi
+  ROLLMPI = rocks-openmpi
 endif
-
-ifndef ROLLNETWORK
-  ROLLNETWORK = eth
-endif
+MPINAME := $(firstword $(subst /, ,$(ROLLMPI)))
 
 ifndef ROLLPY
   ROLLPY = python
@@ -19,9 +16,9 @@ ifndef PYVERSION
   PYVERSION = 2.6
 endif
 
-NAME           = mpi4py_$(COMPILERNAME)_$(ROLLMPI)_$(ROLLNETWORK)_py$(PYVERSION)
+NAME           = mpi4py_$(COMPILERNAME)_$(ROLLMPI)_py$(PYVERSION)
 VERSION        = 1.3.1
-RELEASE        = 1
+RELEASE        = 2
 PKGROOT        = /opt/mpi4py
 
 SRC_SUBDIR     = mpi4py

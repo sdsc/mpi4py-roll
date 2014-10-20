@@ -75,24 +75,22 @@ copyright rpm pkg clean::
 	      grep -q ROLLCOMPILER $$i/version.mk; \
 	      if test $$? -eq 0; then \
 	        for c in $(ROLLCOMPILER); do \
-	          for n in $(ROLLNETWORK); do \
-	            grep -q ROLLMPI $$i/version.mk; \
-	            if test $$? -eq 0; then \
-	              for m in $(ROLLMPI); do \
-	                echo make $@ in $$i with ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION}; \
-	                (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
-	              done; \
-	            else \
-	              echo make $@ in $$i with ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI="$(ROLLMPI)"; \
-	              (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLNETWORK=$$n ROLLMPI="$(ROLLMPI)" $@) || exit 2; \
-	            fi; \
-	          done; \
+	          grep -q ROLLMPI $$i/version.mk; \
+	          if test $$? -eq 0; then \
+	            for m in $(ROLLMPI); do \
+	              echo make $@ in $$i with ROLLCOMPILER=$$c ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION}; \
+	              (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
+	            done; \
+	          else \
+	            echo make $@ in $$i with ROLLCOMPILER=$$c ROLLMPI="$(ROLLMPI)"; \
+	            (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLMPI="$(ROLLMPI)" $@) || exit 2; \
+	          fi; \
 	        done; \
 	      else \
-	        (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLNETWORK="$(ROLLNETWORK)" ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
+	        (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
 	      fi; \
 	    done; \
 	  else \
-	    (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLNETWORK="$(ROLLNETWORK)" $@) || exit 2; \
+	    (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" $@) || exit 2; \
 	  fi; \
 	done
