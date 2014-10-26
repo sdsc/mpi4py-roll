@@ -2,4 +2,4 @@
 setenv MPI4PYHOME /opt/mpi4py
 set lib [glob -nocomplain /opt/mpi4py/lib*/python*/site-packages]
 prepend-path PYTHONPATH $lib
-module load ROLLPY
+module load ROLLCOMPILER ROLLMPI ROLLPY
