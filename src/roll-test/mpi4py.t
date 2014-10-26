@@ -24,7 +24,11 @@ if($appliance =~ /$installedOnAppliancesPattern/) {
 open(OUT, ">$TESTFILE.sh");
 print OUT <<END;
 module load mpi4py
-mpirun -np 4 python $TESTFILE.py
+output=`mpirun -np 4 python $TESTFILE.py 2>&1`
+if [[ "\$output" =~ "run-as-root" ]]; then
+  output=`mpirun --allow-run-as-root -np 4 python $TESTFILE.py 2>&1`
+fi
+echo "\$output"
 END
 close (OUT);
 
