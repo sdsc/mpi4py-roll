@@ -50,22 +50,12 @@ The build process recognizes "gnu", "intel" or "pgi" as the value for the
 `ROLLCOMPILER` variable; any MPI modulefile name may be used as the value of
 the `ROLLMPI` variable.  The default values are "gnu" and "rocks-openmpi".
 
-The values of the `ROLLCOMPILER` and `ROLLMPI` variables are incorporated into
-the names of the produced rpms.  For example,
-
-```shell
-make ROLLCOMPILER=intel ROLLMPI=mvapich2_ib 2>&1 | tee build.log
-```
-
-produces a roll containing an rpm with a name that begins
-`mpi4py_intel_mvapich2_ib`.
-
 The roll also supports specifying building with/for python versions other than
 the one included with the o/s.  To use this feature, specify a `ROLLPY` make
 variable that includes a space-delimited list of python modulefiles, e.g.,
 
 ```shell
-% make ROLLPY=opt-python 2>&1 | tee build.log
+% make ROLLPY=python 2>&1 | tee build.log
 ```
 
 ## Installation
