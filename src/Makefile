@@ -65,32 +65,8 @@ default:
 	@echo "copyright|rpm|pkg|clean"
 
 copyright rpm pkg clean::
+	module load $(ROLLPY); \
+	PYVERSION=`python -c "from __future__ import print_function;import sys;print(sys.version[:3])"`; \
 	for i in $(SRCDIRS); do \
-	  grep -q PYVERSION $$i/version.mk; \
-	  if test $$? -eq 0; then \
-	    PYDEFAULT=`echo $(ROLLPY) | sed 's/ .*//'`; \
-	    for p in $(ROLLPY); do \
-	      module load $$p; \
-	      export PYVERSION=`python -c "from __future__ import print_function;import sys;print(sys.version[:3])"`; \
-	      grep -q ROLLCOMPILER $$i/version.mk; \
-	      if test $$? -eq 0; then \
-	        for c in $(ROLLCOMPILER); do \
-	          grep -q ROLLMPI $$i/version.mk; \
-	          if test $$? -eq 0; then \
-	            for m in $(ROLLMPI); do \
-	              echo make $@ in $$i with ROLLCOMPILER=$$c ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION}; \
-	              (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLMPI=$$m ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
-	            done; \
-	          else \
-	            echo make $@ in $$i with ROLLCOMPILER=$$c ROLLMPI="$(ROLLMPI)"; \
-	            (cd $$i && $(MAKE) ROLLCOMPILER=$$c ROLLMPI="$(ROLLMPI)" $@) || exit 2; \
-	          fi; \
-	        done; \
-	      else \
-	        (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLPY=$$p PYVERSION=$${PYVERSION} $@) || exit 2; \
-	      fi; \
-	    done; \
-	  else \
-	    (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" $@) || exit 2; \
-	  fi; \
+	  (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLPY="$(ROLLPY)" PYVERSION="$$PYVERSION" $@) || exit 2; \
 	done

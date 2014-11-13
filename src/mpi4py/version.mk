@@ -16,9 +16,9 @@ ifndef PYVERSION
   PYVERSION = 2.6
 endif
 
-NAME           = mpi4py_$(COMPILERNAME)_$(ROLLMPI)_py$(PYVERSION)
+NAME           = sdsc-mpi4py
 VERSION        = 1.3.1
-RELEASE        = 2
+RELEASE        = 3
 PKGROOT        = /opt/mpi4py
 
 SRC_SUBDIR     = mpi4py
