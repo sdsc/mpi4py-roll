@@ -65,8 +65,6 @@ default:
 	@echo "copyright|rpm|pkg|clean"
 
 copyright rpm pkg clean::
-	module load $(ROLLPY); \
-	PYVERSION=`python -c "from __future__ import print_function;import sys;print(sys.version[:3])"`; \
 	for i in $(SRCDIRS); do \
-	  (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLPY="$(ROLLPY)" PYVERSION="$$PYVERSION" $@) || exit 2; \
+	  (cd $$i && $(MAKE) ROLLCOMPILER="$(ROLLCOMPILER)" ROLLMPI="$(ROLLMPI)" ROLLPY="$(ROLLPY)" $@) || exit 2; \
 	done
