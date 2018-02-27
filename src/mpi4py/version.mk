@@ -14,7 +14,7 @@ endif
 
 NAME           = sdsc-mpi4py
 VERSION        = 1.3.1
-RELEASE        = 4
+RELEASE        = 5
 PKGROOT        = /opt/mpi4py
 
 SRC_SUBDIR     = mpi4py
@@ -27,4 +27,5 @@ SOURCE_DIR     = $(SOURCE_PKG:%.$(SOURCE_SUFFIX)=%)
 
 TAR_GZ_PKGS    = $(SOURCE_PKG)
 
-RPM.EXTRAS     = AutoReq:No
+RPM.EXTRAS     = AutoReq:No\nAutoProv:No
+RPM.PREFIX     = $(PKGROOT)
