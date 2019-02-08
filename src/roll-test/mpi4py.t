@@ -34,11 +34,15 @@ close (OUT);
 
 open(OUT, ">$TESTFILE.py");
 print OUT <<END;
+import mpi4py
+mpi4py.rc(initialize=False, finalize=False)
 from mpi4py import MPI
 import sys
+MPI.Init()
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 print "Hi, I am process ",rank
+MPI.Finalize()
 END
 close(OUT);
   
