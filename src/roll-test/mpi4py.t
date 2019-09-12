@@ -49,7 +49,7 @@ close(OUT);
 SKIP: {
   skip 'mpi4py not installed', 1 if ! $isInstalled;
   `/bin/bash $TESTFILE.sh >& $TESTFILE.out`;
-  $count=`grep -c  "Hi, I am process" $TESTFILE.out`;
+  $count=`grep -o  "Hi, I am process" $TESTFILE.out|wc -l`;
   ok($count == 4, "mpi4py works");
 }
 
