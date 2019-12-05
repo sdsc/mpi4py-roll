@@ -24,9 +24,9 @@ if($appliance =~ /$installedOnAppliancesPattern/) {
 open(OUT, ">$TESTFILE.sh");
 print OUT <<END;
 module load mpi4py
-output=`mpirun -np 4 python $TESTFILE.py 2>&1`
+output=`mpirun -np 4 python3 $TESTFILE.py 2>&1`
 if [[ "\$output" =~ "run-as-root" ]]; then
-  output=`mpirun --allow-run-as-root -np 4 python $TESTFILE.py 2>&1`
+  output=`mpirun --allow-run-as-root -np 4 python3 $TESTFILE.py 2>&1`
 fi
 echo "\$output"
 END
@@ -41,7 +41,7 @@ import sys
 MPI.Init()
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
-print "Hi, I am process ",rank
+print("Hi, I am process ",rank)
 MPI.Finalize()
 END
 close(OUT);
