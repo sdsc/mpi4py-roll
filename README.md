@@ -27,6 +27,8 @@ The roll sources assume that modulefiles provided by SDSC compiler, mpi, and pyt
 rolls are available, but it will build without them as long as the environment
 variables they provide are otherwise defined.
 
+Note that as of this version and later (3.0.3), mpi4py is built with python3.
+
 
 ## Building
 
