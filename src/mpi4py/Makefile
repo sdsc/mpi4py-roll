@@ -84,7 +84,7 @@ build: $(SRC_DIRS)
 	  $(MODULE_LOAD_MPI); \
 	  $(MODULE_LOAD_PYTHON); \
 	  cd $(SOURCE_DIR); \
-	  python setup.py build \
+	  python3 setup.py build \
 	)
 	@echo "::: Package $(NAME) build complete :::"
 
@@ -93,10 +93,10 @@ install::
 	  $(MODULE_LOAD_CC); \
 	  $(MODULE_LOAD_MPI); \
 	  $(MODULE_LOAD_PYTHON); \
-	  pyvers=`python --version 2>&1 | grep -o '[0-9][0-9]*\.[0-9][0-9]*'`; \
+	  pyvers=`python3 --version 2>&1 | grep -o '[0-9][0-9]*\.[0-9][0-9]*'`; \
 	  cd $(SOURCE_DIR); \
 	  export PYTHONPATH=$(ROOT)/$(PKGROOT)/lib64/python$${pyvers}:$${PYTHONPATH}; \
-	  python setup.py install --prefix=$(ROOT)/$(PKGROOT) \
+	  python3 setup.py install --prefix=$(ROOT)/$(PKGROOT) \
 	)
 	$(INSTALL_LICENSE_FILES)
 	@echo "::: Package $(NAME) install complete :::"

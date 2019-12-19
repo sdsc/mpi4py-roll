@@ -13,7 +13,7 @@ ifndef ROLLPY
 endif
 
 NAME           = sdsc-mpi4py
-VERSION        = 3.0.0
+VERSION        = 3.0.3
 RELEASE        = 0
 PKGROOT        = /opt/mpi4py
 
